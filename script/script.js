@@ -4,11 +4,15 @@ const debugElement = document.getElementById('debug');
 const button = document.getElementById('btn');
 const petals = [];
 
-const petalCount = 90;
+const petalCount = 50;
 
-let petalImg = new Image();
-petalImg.src = 'img/petal.png';
-//'img/bomb-2 (1).png';
+// let petalImg = new Image();
+// petalImg.src = 'img/petal.png';
+// //'img/bomb-2 (1).png';
+
+const imagelist = [
+    'img/cl.png','img/fl.png','img/Sax.png','img/Tb.png','img/Tp.png','img/Eu.png','img/Hr.png',
+]
 
 const userAgent = navigator.userAgent ?? navigator.vendor ?? window.opera;
 const isIOS = /iPad|iPhone|iPod/.test(userAgent);
@@ -48,13 +52,18 @@ function generatePetal(fromTop = true) {
     petal.y = fromTop ? rand(-innerHeight * 0.2, 0) : rand(0, innerHeight);
     petal.size = rand(32, 64);
     petal.angle = rand(0, 2 * Math.PI);
-    petal.alpha = rand(0.6, 1);
+    petal.alpha = rand(1);
     petal.fallSpeed = rand(40, 90);
     petal.driftSpeed = rand(-15, 15);
     petal.rotateSpeed = rand((-Math.PI * 2) / 3, (Math.PI * 2) / 3);
     //petal.swayPhase = rand(0, 2 * Math.PI);                          // 揺れの初期位相
     //petal.swayAmp = rand(4, 16);                                     // 揺れの振幅
     //petal.swayPhaseSpeed = rand(0.6, 1.6);
+    let petalImg = new Image();
+    const imagenum = Math.floor(rand(0, 7));
+    console.log(imagenum)
+    petalImg.src = imagelist[imagenum];
+    petal.image = petalImg
     return petal;
 }
 
@@ -68,7 +77,6 @@ function generatePetals(petalCount) {
 let last = performance.now();
 
 function drawPetals(petals) {
-    console.log(petalImg.src)
     // if (!petalImg.complete) return;
 
 
@@ -82,7 +90,7 @@ function drawPetals(petals) {
 
         const width = petal.size;
         const height = petal.size;
-        context.drawImage(petalImg, -width / 2, -height / 2, width, height);
+        context.drawImage(petal.image, -width / 2, -height / 2, width, height);
 
         context.restore();
     });
